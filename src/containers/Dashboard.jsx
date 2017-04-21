@@ -6,25 +6,24 @@ import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import Product from '../components/product/Product';
 
 import './Dashboard.css';
 
-// const muiTheme = getMuiTheme({
-//   palette: {
-//     accent1Color: deepOrange500,
-//   },
-// });
-
 class Dashboard extends Component {
-  userProducts = [];
+  userProducts =
+  {
+    classic: { price: '269.99', quantity: 0 },
+    standout: { price: '322.99', quantity: 0 },
+    premium: { price: '394.99', quantity: 0 },
+  };
   constructor(props, context) {
     super(props, context);
 
     this.state = {
-      open: false,
+
     };
 
     this.checkout = this.checkout.bind(this);
@@ -34,7 +33,10 @@ class Dashboard extends Component {
 
   selectedPlan(productDetail) {
     console.log(productDetail);
-    this.userProducts.push(productDetail)
+    const p_id = productDetail.id;
+    const p_info = this.userProducts[p_id]
+    this.userProducts[p_id] = Object.assign({}, p_info, { quantity: 1 })
+    console.log(this.userProducts);
   }
 
   checkout() {
@@ -71,24 +73,35 @@ class Dashboard extends Component {
     }
   }
 
+  buyMoreGetMore(buyNum, getNum, productName) {
+    let count = 0;
+    for (let idx in this.userProducts) {
+      if (this.userProducts[idx].name === productName) {
+        count++;
+      }
+    }
+    if (count >= buyNum) {
+
+    }
+    this.userProducts
+  }
+
   render() {
     return (
-      // <MuiThemeProvider muiTheme={muiTheme}>
-        <div className="container">
-          <div style={{ background: 'skyblue' }}>
-            <Product selectedPlan={this.selectedPlan} id='classic' name="Classic Ad" price={269.99} />
-            <Product selectedPlan={this.selectedPlan} id='standout' name="Standout Ad" price={322.99} />
-            <Product selectedPlan={this.selectedPlan} id='premium' name="Premium Ad" price={394.99} />
-          </div>
-          <div>
-            <RaisedButton
-              label="Checkout"
-              secondary={true}
-              onTouchTap={this.checkout}
-            />
-          </div>
+      <div className="container">
+        <div style={{ background: 'skyblue' }}>
+          <Product selectedPlan={this.selectedPlan} id='classic' name="Classic Ad" price={269.99} />
+          <Product selectedPlan={this.selectedPlan} id='standout' name="Standout Ad" price={322.99} />
+          <Product selectedPlan={this.selectedPlan} id='premium' name="Premium Ad" price={394.99} />
         </div>
-      // </MuiThemeProvider>
+        <div>
+          <RaisedButton
+            label="Checkout"
+            secondary={true}
+            onTouchTap={this.checkout}
+          />
+        </div>
+      </div>
     );
   }
 }
