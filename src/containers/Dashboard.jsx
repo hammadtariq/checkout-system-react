@@ -45,45 +45,34 @@ class Dashboard extends Component {
   }
 
   checkout() {
-    let totalCost = 0;
     let checkoutInfo = [];
     this.verifyUserDeals();
     for (let product in this.userProducts) {
       const {quantity, price} = this.userProducts[product];
+      let totalCost = 0;
       if(quantity > 0){
         checkoutInfo.push(this.userProducts[product]);
         if(this.userProducts[product] && this.userProducts[product]['discountedPrice']){
           console.log('discounted price found');
-          totalCost += parseFloat(this.userProducts[product].discountedPrice * quantity);
+          totalCost = parseFloat(this.userProducts[product].discountedPrice * quantity);
+          this.userProducts[product].totalCost = totalCost; 
+        } else if(product !== 'classic') {
+          totalCost = parseFloat(price * quantity);
+          this.userProducts[product].totalCost = totalCost; 
         } else {
-          totalCost += parseFloat(price * quantity);
+          console.log("default case");
         }
       }
-      
     }
-    console.log('total => ', totalCost);
     console.log('selected products => ', checkoutInfo);
     console.log('all ',this.userProducts);
   }
 
   verifyUserDeals() {
     let user = 'FORD';
-    let totalCost = 0;
     switch (user) {
       case 'UNILEVER':
-        // Gets a for 3 for 2 deal on Classic Ads
-        if(this.buyMoreGetMore(2, 3, 'classic')) {
-            const { price, quantity } = this.userProducts['classic'];
-            const actualCost = price * quantity;
-            const discount = price * this.specialDeals['buyMoreGetMore'].applied;
-            totalCost = actualCost - discount;
-            console.log('actualCost => ',actualCost);
-            console.log('after discount => ',totalCost);
-        } else {
-            const { price, quantity } = this.userProducts['classic'];
-            totalCost = price * quantity;
-            console.log('totalcost => ',totalCost);
-        };
+        this.processBuyMoreGetMore(2, 'classic')
         break;
       case 'APPLE':
         // Gets a discount on Standout Ads where the price drops to $299.99 per ad
@@ -102,19 +91,7 @@ class Dashboard extends Component {
         */
         this.discountOnPrice('standout', 0, 309.99);
         this.discountOnPrice('premium', 3, 389.99);
-        if(this.buyMoreGetMore(4, 5, 'classic')) {
-            const { price, quantity } = this.userProducts['classic'];
-            const actualCost = price * quantity;
-            const discount = price * this.specialDeals['buyMoreGetMore'].applied;
-            totalCost = actualCost - discount;
-            console.log('actualCost => ',actualCost);
-            console.log('after discount => ',totalCost);
-        } else {
-            const { price, quantity } = this.userProducts['classic'];
-            totalCost = price * quantity;
-            console.log('totalcost => ',totalCost);
-        };
-
+        this.processBuyMoreGetMore(4, 'classic')
         break;
       default:
         break;
@@ -127,20 +104,39 @@ class Dashboard extends Component {
     }
   }
 
-  buyMoreGetMore(buyNum, getNum, productName) {
-    const { quantity } = this.userProducts[productName];
+  buyMoreGetMore(buyNum, productId) {
+    const { quantity } = this.userProducts[productId];
     if (quantity >= buyNum) {
       const { applied, status } = this.specialDeals['buyMoreGetMore'];
       const appliedCount = Math.floor(quantity / buyNum);
       console.log('applied count => ',appliedCount);
-      this.specialDeals['buyMoreGetMore'] = Object.assign({}, this.specialDeals['buyMoreGetMore'], { status: true, applied: appliedCount })
-      this.userProducts[productName].quantity = this.userProducts[productName].quantity + appliedCount; 
+      this.specialDeals['buyMoreGetMore'] = Object.assign({}, this.specialDeals['buyMoreGetMore'], { status: true, applied: appliedCount });
+      this.userProducts[productId].quantity = this.userProducts[productId].quantity + appliedCount; 
       console.log('deal check', this.specialDeals['buyMoreGetMore'])
-      console.log('quantity updated', this.userProducts[productName])
+      console.log('quantity updated', this.userProducts[productId])
       return true;
     } else {
       return false;
     }
+  }
+
+  processBuyMoreGetMore(buyNum, productId) {
+    let totalCost = 0;
+    if(this.buyMoreGetMore(buyNum, productId)) {
+        const { price, quantity } = this.userProducts[productId];
+        const actualCost = price * quantity;
+        const discount = price * this.specialDeals['buyMoreGetMore'].applied;
+        totalCost = actualCost - discount;
+        debugger;
+        this.userProducts[productId].totalCost = actualCost - discount;
+        console.log('actualCost => ',actualCost);
+        console.log('after discount => ',totalCost);
+    } else {
+        const { price, quantity } = this.userProducts[productId];
+        totalCost = price * quantity;
+        this.userProducts[productId].totalCost = totalCost
+        console.log('totalcost => ',totalCost);
+    };
   }
 
   render() {
