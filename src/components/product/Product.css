@@ -1,0 +1,17 @@
+.mainBody {
+    float: 'left';
+    padding: '10px';
+    border: '1px solid #000';
+    width: '200px';
+    height: '500px';
+    margin: '10px';
+    text-align: 'center';
+}
+
+.pricing {
+    width: '100px';
+    height: '100px';
+    border-radius: '100%';
+    background: 'yellow';
+    display: 'inline-block';
+}

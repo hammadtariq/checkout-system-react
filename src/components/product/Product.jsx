@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react'
+import RaisedButton from 'material-ui/RaisedButton';
+import './Product.css';
 
 const propTypes = {
     name: PropTypes.string,
@@ -52,15 +54,19 @@ class Product extends Component {
                 <h2>{name}</h2>
                 <p>plan description</p>
                 <div style={pricing}>
-                    <span style={{fontWeight: 600, fontSize: 24}}>${price}</span>
+                    <span style={{ fontWeight: 600, fontSize: 24 }}>${price}</span>
                 </div>
-                <ul style={{listStyle: 'none'}}>
+                <ul style={{ listStyle: 'none' }}>
                     <li>a</li>
                     <li>b</li>
                     <li>c</li>
                 </ul>
                 <div>
-                    <button onClick={this.selectPlan}>Select Plan</button>
+                    <RaisedButton
+                        label="Select Plan"
+                        secondary={true}
+                        onTouchTap={this.selectPlan}
+                    />
                 </div>
             </div>
         )

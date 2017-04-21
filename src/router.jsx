@@ -4,17 +4,15 @@ import {
     Route,
     Link
 } from 'react-router-dom'
+import AppBar from 'material-ui/AppBar';
+import { deepOrange500 } from 'material-ui/styles/colors';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import Login from './containers/Login';
 import Dashboard from './containers/Dashboard';
 
-const Home = () => (
-    <div>
-        <h2>Home</h2>
-    </div>
-)
-
-const Topic = ({ match }) => (
+/*const Topic = ({ match }) => (
     <div>
         <h3>{match.params.topicId}</h3>
     </div>
@@ -46,23 +44,33 @@ const Topics = ({ match }) => (
             <h3>Please select a topic.</h3>
         )} />
     </div>
-)
+)*/
+
+const muiTheme = getMuiTheme({
+    palette: {
+        accent1Color: deepOrange500,
+    },
+});
 
 const RouteComponent = () => (
-    <Router>
-        <div>
-            <ul>
-                <li><Link to="/">Login</Link></li>
-                <li><Link to="/dashboard">Dashboard</Link></li>
-                <li><Link to="/topics">Topics</Link></li>
-            </ul>
+    <MuiThemeProvider muiTheme={muiTheme}>
+        <Router>
+            <div>
+                <AppBar
+                    title={<span className="appbar-title" >Checkout System</span>}
+                    iconElementRight={
+                        <ul className="nav-bar">
+                            <li className="nav-li"><Link to="/">Login</Link></li>
+                            <li className="nav-li"><Link to="/dashboard">Dashboard</Link></li>
+                        </ul>
+                    }
+                />
 
-            <hr />
+                <Route exact path="/" component={Login} />
+                <Route path="/dashboard" component={Dashboard} />
+            </div>
+        </Router>
+    </MuiThemeProvider>
 
-            <Route exact path="/" component={Login} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/topics" component={Topics} />
-        </div>
-    </Router>
 )
 export default RouteComponent

@@ -6,6 +6,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
+import { Route, state} from 'react-router-dom'
 
 const styles = {
     container: {
@@ -21,10 +22,17 @@ const muiTheme = getMuiTheme({
 });
 
 class Login extends Component {
+    
+    constructor(props) {
+        super(props)
+        this.state = {
+        }
+        this.login = this.login.bind(this);
+    }
 
-
-    handleTouchTap() {
-        console.log("Login")
+    login(userInfo) {
+        console.log("user => ",userInfo);
+        this.props.history.push('/dashboard');
     }
 
     render() {
@@ -32,8 +40,6 @@ class Login extends Component {
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div style={styles.container}>
                     <h2>Login</h2>
-
-
                     <Card>
                         {/*<CardHeader
                             title="Login"
@@ -61,7 +67,7 @@ class Login extends Component {
                             <RaisedButton
                                 label="Login"
                                 secondary={true}
-                                onTouchTap={this.handleTouchTap}
+                                onTouchTap={this.login}
                             />
                         </CardActions>
                     </Card>
