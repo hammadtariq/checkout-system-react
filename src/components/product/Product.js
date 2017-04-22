@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import './Product.css';
 
@@ -11,7 +12,19 @@ const defaultProps = {
     defaultProps
 }
 
+/**
+ * 
+ * 
+ * @class Product
+ * @extends {Component}
+ */
 class Product extends Component {
+    /**
+     * Creates an instance of Product.
+     * @param {any} props 
+     * 
+     * @memberOf Product
+     */
     constructor(props) {
         super(props)
         this.state = {
@@ -19,6 +32,12 @@ class Product extends Component {
         this.selectPlan = this.selectPlan.bind(this);
     }
 
+    /**
+     * 
+     * 
+     * 
+     * @memberOf Product
+     */
     selectPlan() {
         const { id, name, price } = this.props;
         const product = {
@@ -29,6 +48,13 @@ class Product extends Component {
         this.props.selectedPlan(product);
     }
 
+    /**
+     * 
+     * 
+     * @returns 
+     * 
+     * @memberOf Product
+     */
     render() {
         const { name, price } = this.props;
         const mainBody = {

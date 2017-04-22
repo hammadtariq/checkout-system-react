@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import Dialog from 'material-ui/Dialog';
-import { deepOrange500 } from 'material-ui/styles/colors';
-import FlatButton from 'material-ui/FlatButton';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
-import { Link } from 'react-router-dom'
 
 import Product from '../components/product/Product';
+import ItemsList from '../components/ItemsList/ItemsList';
 
 import './Dashboard.css';
 
+/**
+ * 
+ * 
+ * @class Dashboard
+ * @extends {Component}
+ */
 class Dashboard extends Component {
+  userInfo = null;
   userProducts = {
     classic: { price: '269.99', quantity: 0 },
     standout: { price: '322.99', quantity: 0 },
@@ -24,18 +25,33 @@ class Dashboard extends Component {
     discountOnPrice: { status: false, applied: 0 },
   };
 
+
+  /**
+   * Creates an instance of Dashboard.
+   * @param {any} props 
+   * @param {any} context 
+   * 
+   * @memberOf Dashboard
+   */
   constructor(props, context) {
     super(props, context);
-
     this.state = {
 
     };
-
+    this.userInfo = this.props.location.state.user;
+    console.log('routes: ', this.props.location.state);
     this.checkout = this.checkout.bind(this);
     this.selectedPlan = this.selectedPlan.bind(this);
     this.verifyUserDeals = this.verifyUserDeals.bind(this);
   }
 
+  /**
+   * 
+   * 
+   * @param {any} productDetail 
+   * 
+   * @memberOf Dashboard
+   */
   selectedPlan(productDetail) {
     console.log(productDetail);
     const p_id = productDetail.id;
@@ -44,33 +60,44 @@ class Dashboard extends Component {
     console.log(this.userProducts);
   }
 
+  /**
+   * 
+   * 
+   * 
+   * @memberOf Dashboard
+   */
   checkout() {
     let checkoutInfo = [];
     this.verifyUserDeals();
     for (let product in this.userProducts) {
-      const {quantity, price} = this.userProducts[product];
+      const { quantity, price } = this.userProducts[product];
       let totalCost = 0;
-      if(quantity > 0){
+      if (quantity > 0) {
         checkoutInfo.push(this.userProducts[product]);
-        if(this.userProducts[product] && this.userProducts[product]['discountedPrice']){
+        if (this.userProducts[product] && this.userProducts[product]['discountedPrice']) {
           console.log('discounted price found');
           totalCost = parseFloat(this.userProducts[product].discountedPrice * quantity);
-          this.userProducts[product].totalCost = totalCost; 
-        } else if(product !== 'classic') {
+          this.userProducts[product].totalCost = totalCost;
+        } else if (product !== 'classic') {
           totalCost = parseFloat(price * quantity);
-          this.userProducts[product].totalCost = totalCost; 
+          this.userProducts[product].totalCost = totalCost;
         } else {
           console.log("default case");
         }
       }
     }
     console.log('selected products => ', checkoutInfo);
-    console.log('all ',this.userProducts);
+    console.log('all ', this.userProducts);
   }
 
+  /**
+   * 
+   * 
+   * 
+   * @memberOf Dashboard
+   */
   verifyUserDeals() {
-    let user = 'FORD';
-    switch (user) {
+    switch (this.userInfo.username.toUpperCase()) {
       case 'UNILEVER':
         this.processBuyMoreGetMore(2, 'classic')
         break;
@@ -98,20 +125,38 @@ class Dashboard extends Component {
     }
   }
 
+  /**
+   * 
+   * 
+   * @param {any} productId 
+   * @param {any} quantity 
+   * @param {any} discountedPrice 
+   * 
+   * @memberOf Dashboard
+   */
   discountOnPrice(productId, quantity, discountedPrice) {
-    if(this.userProducts[productId].quantity >= quantity){
+    if (this.userProducts[productId].quantity >= quantity) {
       this.userProducts[productId].discountedPrice = discountedPrice;
     }
   }
 
+  /**
+   * 
+   * 
+   * @param {any} buyNum 
+   * @param {any} productId 
+   * @returns 
+   * 
+   * @memberOf Dashboard
+   */
   buyMoreGetMore(buyNum, productId) {
     const { quantity } = this.userProducts[productId];
     if (quantity >= buyNum) {
       const { applied, status } = this.specialDeals['buyMoreGetMore'];
       const appliedCount = Math.floor(quantity / buyNum);
-      console.log('applied count => ',appliedCount);
+      console.log('applied count => ', appliedCount);
       this.specialDeals['buyMoreGetMore'] = Object.assign({}, this.specialDeals['buyMoreGetMore'], { status: true, applied: appliedCount });
-      this.userProducts[productId].quantity = this.userProducts[productId].quantity + appliedCount; 
+      this.userProducts[productId].quantity = this.userProducts[productId].quantity + appliedCount;
       console.log('deal check', this.specialDeals['buyMoreGetMore'])
       console.log('quantity updated', this.userProducts[productId])
       return true;
@@ -120,25 +165,39 @@ class Dashboard extends Component {
     }
   }
 
+  /**
+   * 
+   * 
+   * @param {any} buyNum 
+   * @param {any} productId 
+   * 
+   * @memberOf Dashboard
+   */
   processBuyMoreGetMore(buyNum, productId) {
     let totalCost = 0;
-    if(this.buyMoreGetMore(buyNum, productId)) {
-        const { price, quantity } = this.userProducts[productId];
-        const actualCost = price * quantity;
-        const discount = price * this.specialDeals['buyMoreGetMore'].applied;
-        totalCost = actualCost - discount;
-        debugger;
-        this.userProducts[productId].totalCost = actualCost - discount;
-        console.log('actualCost => ',actualCost);
-        console.log('after discount => ',totalCost);
+    if (this.buyMoreGetMore(buyNum, productId)) {
+      const { price, quantity } = this.userProducts[productId];
+      const actualCost = price * quantity;
+      const discount = price * this.specialDeals['buyMoreGetMore'].applied;
+      totalCost = actualCost - discount;
+      this.userProducts[productId].totalCost = actualCost - discount;
+      console.log('actualCost => ', actualCost);
+      console.log('after discount => ', totalCost);
     } else {
-        const { price, quantity } = this.userProducts[productId];
-        totalCost = price * quantity;
-        this.userProducts[productId].totalCost = totalCost
-        console.log('totalcost => ',totalCost);
+      const { price, quantity } = this.userProducts[productId];
+      totalCost = price * quantity;
+      this.userProducts[productId].totalCost = totalCost
+      console.log('totalcost => ', totalCost);
     };
   }
 
+  /**
+   * 
+   * 
+   * @returns 
+   * 
+   * @memberOf Dashboard
+   */
   render() {
     return (
       <div className="container">
@@ -146,6 +205,9 @@ class Dashboard extends Component {
           <Product selectedPlan={this.selectedPlan} id='classic' name="Classic Ad" price={269.99} />
           <Product selectedPlan={this.selectedPlan} id='standout' name="Standout Ad" price={322.99} />
           <Product selectedPlan={this.selectedPlan} id='premium' name="Premium Ad" price={394.99} />
+        </div>
+        <div>
+          <ItemsList />
         </div>
         <div>
           <RaisedButton
