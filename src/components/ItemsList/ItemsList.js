@@ -66,7 +66,7 @@ class ItemsList extends Component {
                 items.push(<ListItem key={key + j} secondaryText={price} primaryText={label} rightIcon={<ActionHome />} />);
             }
         }
-
+        totalCost = Math.round(totalCost * 100) / 100
         return { totalCost: totalCost, items: items };
     }
 

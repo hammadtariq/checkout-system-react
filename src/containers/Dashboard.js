@@ -17,7 +17,6 @@ import './Dashboard.css';
  */
 class Dashboard extends Component {
   userInfo = { username: '' };
-  myCart = [];
   userProducts = {
     classic: { price: '269.99', quantity: 0, itemAdded: 0, totalCost: 0, id: 'classic' },
     standout: { price: '322.99', quantity: 0, itemAdded: 0, totalCost: 0, id: 'standout' },
@@ -41,11 +40,11 @@ class Dashboard extends Component {
     super(props, context);
     this.state = {
       openToast: false,
-      myCart: [],
+      toastMessage: '',
       userInfo: { username: '' },
       userProducts: this.userProducts,
-      specialDeals: this.specialDeals,
     };
+
     this.checkout = this.checkout.bind(this);
     this.selectedPlan = this.selectedPlan.bind(this);
     this.verifyUserDeals = this.verifyUserDeals.bind(this);
@@ -83,10 +82,8 @@ class Dashboard extends Component {
     this.calculateTotalAmount();
     this.setState((prevState, props) => ({
       userProducts: this.userProducts,
-      myCart: this.myCart
     }), () => {
       console.log('calback of products => ', this.state.userProducts);
-      console.log('calback of cart => ', this.state.myCart);
     });
   }
 
@@ -136,15 +133,15 @@ class Dashboard extends Component {
   verifyUserDeals(productId) {
     switch (this.state.userInfo.username.toUpperCase()) {
       case 'UNILEVER':
-        this.processBuyMoreGetMore(2, productId)
+        this.applyUnileverDeals(productId);
         break;
       case 'APPLE':
         // Gets a discount on Standout Ads where the price drops to $299.99 per ad
-        this.discountOnPrice(productId, 0, 299.99);
+        this.applyAppleDeals(productId);
         break;
       case 'NIKE':
         // Gets a discount on Premium Ads where 4 or more are purchased. The price drops to $379.99 per ad
-        this.discountOnPrice(productId, 4, 379.99);
+        this.applyNikeDeals(productId);
         break;
       case 'FORD':
         /*
@@ -153,14 +150,49 @@ class Dashboard extends Component {
             - Gets a discount on Premium Ads when 3 or more are purchased. The price drops
             to $389.99 per ad
         */
-        this.discountOnPrice(productId, 0, 309.99);
-        this.discountOnPrice(productId, 3, 389.99);
-        this.processBuyMoreGetMore(4, productId)
+        this.applyFordDeals(productId);
         break;
       default:
         break;
     }
   }
+
+  applyFordDeals(productId) {
+    if (productId === 'standout') {
+      this.discountOnPrice(productId, 0, 309.99);
+    } else if (productId === 'premium') {
+      this.discountOnPrice(productId, 3, 389.99);
+    } else if (productId === 'classic') {
+      this.processBuyMoreGetMore(4, productId)
+    } else {
+      // do nothing
+    }
+  }
+
+  applyNikeDeals(productId) {
+    if (productId === 'premium') {
+      this.discountOnPrice(productId, 4, 379.99);
+    } else {
+      // do nothing
+    }
+  }
+
+  applyAppleDeals(productId) {
+    if (productId === 'standout') {
+      this.discountOnPrice(productId, 0, 299.99);
+    } else {
+      // do nothing
+    }
+  }
+
+  applyUnileverDeals(productId) {
+    if (productId === 'classic') {
+      this.processBuyMoreGetMore(2, productId)
+    } else {
+      // do nothing
+    }
+  }
+
 
   /**
    * 
@@ -172,7 +204,7 @@ class Dashboard extends Component {
    * @memberOf Dashboard
    */
   discountOnPrice(productId, quantity, discountedPrice) {
-    if(productId !== 'classic' && this.userProducts[productId].quantity >= quantity){
+    if (this.userProducts[productId].quantity >= quantity) {
       this.userProducts[productId].discountedPrice = discountedPrice;
       const message = `Congrats! On buying ${this.userProducts[productId].quantity} items of ${productId} price drops to $${discountedPrice}.`
       this.showToast(message);
@@ -210,7 +242,7 @@ class Dashboard extends Component {
    */
   processBuyMoreGetMore(buyNum, productId) {
     let totalCost = 0;
-    if(productId !== 'classic'){
+    if (productId !== 'classic') {
       return;
     }
     if (this.buyMoreGetMore(buyNum, productId)) {
