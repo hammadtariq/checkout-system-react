@@ -8,6 +8,7 @@
 
 .container-item {
     flex-wrap: nowrap;
+    -webkit-flex-wrap: nowrap;
 }
 
 .mainBody:last-child {

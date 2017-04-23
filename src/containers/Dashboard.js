@@ -13,11 +13,12 @@ import './Dashboard.css';
  * @extends {Component}
  */
 class Dashboard extends Component {
-  userInfo = null;
+  userInfo = { username: '' };
+  myCart = [];
   userProducts = {
-    classic: { price: '269.99', quantity: 0 },
-    standout: { price: '322.99', quantity: 0 },
-    premium: { price: '394.99', quantity: 0 },
+    classic: { price: '269.99', quantity: 0, totalCost: 0, id: 'classic' },
+    standout: { price: '322.99', quantity: 0, totalCost: 0, id: 'standout' },
+    premium: { price: '394.99', quantity: 0, totalCost: 0, id: 'premium' },
   };
 
   specialDeals = {
@@ -36,20 +37,27 @@ class Dashboard extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-
+      myCart: [],
+      userInfo: { username: '' },
+      userProducts: this.userProducts,
+      specialDeals: this.specialDeals,
     };
-    this.setUserInfo();
     this.checkout = this.checkout.bind(this);
     this.selectedPlan = this.selectedPlan.bind(this);
     this.verifyUserDeals = this.verifyUserDeals.bind(this);
   }
 
+  componentDidMount() {
+    this.setUserInfo();
+  }
+
   setUserInfo() {
     const location = this.props.location
-    if(location.state && location.state.user) {
-      this.userInfo = location.state.user;
+    if (location.state && location.state.user) {
+      this.setState({ userInfo: location.state.user }, () => {
+        console.log('calback => ', this.state.userInfo);
+      });
     }
-    console.log('routes: ', this.userInfo);
   }
 
   /**
@@ -64,7 +72,17 @@ class Dashboard extends Component {
     const p_id = productDetail.id;
     const p_info = this.userProducts[p_id]
     this.userProducts[p_id] = Object.assign({}, p_info, { quantity: p_info.quantity + 1 })
-    console.log(this.userProducts);
+    this.verifyUserDeals();
+    // for (let i = 0; i < this.userProducts[p_id].quantity; i++) {
+    //   this.myCart.push(this.userProducts[p_id]);
+    // }
+    this.setState((prevState, props) => ({
+      userProducts: this.userProducts,
+      myCart: this.myCart
+    }), () => {
+      console.log('calback of products => ', this.state.userProducts);
+      console.log('calback of cart => ', this.state.myCart);
+    });
   }
 
   /**
@@ -104,7 +122,7 @@ class Dashboard extends Component {
    * @memberOf Dashboard
    */
   verifyUserDeals() {
-    switch (this.userInfo.username.toUpperCase()) {
+    switch (this.state.userInfo.username.toUpperCase()) {
       case 'UNILEVER':
         this.processBuyMoreGetMore(2, 'classic')
         break;
@@ -188,6 +206,7 @@ class Dashboard extends Component {
       const discount = price * this.specialDeals['buyMoreGetMore'].applied;
       totalCost = actualCost - discount;
       this.userProducts[productId].totalCost = actualCost - discount;
+      this.userProducts[productId].freeItem = this.specialDeals['buyMoreGetMore'].applied;
       console.log('actualCost => ', actualCost);
       console.log('after discount => ', totalCost);
     } else {
@@ -214,7 +233,7 @@ class Dashboard extends Component {
           <Product selectedPlan={this.selectedPlan} id='premium' name="Premium Ad" price={394.99} />
         </div>
         <div className="container-item container-item-2">
-          <ItemsList />
+          <ItemsList userProducts={this.state.userProducts} />
         </div>
         <div className="">
           {/*<RaisedButton

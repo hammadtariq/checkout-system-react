@@ -46,14 +46,21 @@ class ItemsList extends Component {
      * @memberOf ItemsList
      */
     render() {
-        const { name, price } = this.props;
+        let items = [];
+        const { name, price, userProducts } = this.props;
+        for (let key in userProducts) {
+            for (let j = 0; j < userProducts[key].quantity; j++) {
+                items.push(<ListItem key={key+j} primaryText={userProducts[key].id} rightIcon={<ActionHome />} />);
+            }
+        }
+        const check = items.map((element)=>{
+
+        })
+
         return (
             <div>
                 <List>
-                    <ListItem primaryText="All mail" rightIcon={<ActionHome />} />
-                    <ListItem primaryText="Trash" rightIcon={<ActionHome />} />
-                    <ListItem primaryText="Spam" rightIcon={<ActionHome />} />
-                    <ListItem primaryText="Follow up" rightIcon={<ActionHome />} />
+                    {items}
                 </List>
             </div>
         )

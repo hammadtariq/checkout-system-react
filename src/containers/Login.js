@@ -43,7 +43,6 @@ class Login extends Component {
      */
     handleChange(evt) {
         const user = Object.assign(this.state.userInfo, { username: evt.target.value.substr(0, 100) })
-        console.log(user);
         this.setState({ userInfo: user });
     }
 
