@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import Snackbar from 'material-ui/Snackbar';
 
 import Product from '../components/product/Product';
 import ItemsList from '../components/ItemsList/ItemsList';
@@ -39,6 +40,7 @@ class Dashboard extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      openToast: false,
       myCart: [],
       userInfo: { username: '' },
       userProducts: this.userProducts,
@@ -47,6 +49,9 @@ class Dashboard extends Component {
     this.checkout = this.checkout.bind(this);
     this.selectedPlan = this.selectedPlan.bind(this);
     this.verifyUserDeals = this.verifyUserDeals.bind(this);
+    this.calculateTotalAmount = this.calculateTotalAmount.bind(this);
+    this.showToast = this.showToast.bind(this);
+    this.hideToast = this.hideToast.bind(this);
   }
 
   componentDidMount() {
@@ -74,7 +79,8 @@ class Dashboard extends Component {
     const p_id = productDetail.id;
     const p_info = this.userProducts[p_id]
     this.userProducts[p_id] = Object.assign({}, p_info, { itemAdded: p_info.itemAdded + 1, quantity: p_info.quantity + 1 })
-    this.verifyUserDeals();
+    this.verifyUserDeals(p_id);
+    this.calculateTotalAmount();
     this.setState((prevState, props) => ({
       userProducts: this.userProducts,
       myCart: this.myCart
@@ -90,7 +96,7 @@ class Dashboard extends Component {
    * 
    * @memberOf Dashboard
    */
-  checkout() {
+  calculateTotalAmount() {
     for (let product in this.userProducts) {
       const { quantity, price } = this.userProducts[product];
       let totalCost = 0;
@@ -110,35 +116,46 @@ class Dashboard extends Component {
     console.log('all ', this.userProducts);
   }
 
+
   /**
    * 
    * 
    * 
    * @memberOf Dashboard
    */
-  verifyUserDeals() {
+  checkout() {
+    console.log('checkout');
+  }
+
+  /**
+   * 
+   * 
+   * 
+   * @memberOf Dashboard
+   */
+  verifyUserDeals(productId) {
     switch (this.state.userInfo.username.toUpperCase()) {
       case 'UNILEVER':
-        this.processBuyMoreGetMore(2, 'classic')
+        this.processBuyMoreGetMore(2, productId)
         break;
       case 'APPLE':
         // Gets a discount on Standout Ads where the price drops to $299.99 per ad
-        this.discountOnPrice('standout', 0, 299.99);
+        this.discountOnPrice(productId, 0, 299.99);
         break;
       case 'NIKE':
         // Gets a discount on Premium Ads where 4 or more are purchased. The price drops to $379.99 per ad
-        this.discountOnPrice('premium', 4, 379.99);
+        this.discountOnPrice(productId, 4, 379.99);
         break;
       case 'FORD':
         /*
-            -Gets a 5 for 4 deal on Classic Ads
+            - Gets a 5 for 4 deal on Classic Ads
             - Gets a discount on Standout Ads where the price drops to $309.99 per ad
             - Gets a discount on Premium Ads when 3 or more are purchased. The price drops
             to $389.99 per ad
         */
-        this.discountOnPrice('standout', 0, 309.99);
-        this.discountOnPrice('premium', 3, 389.99);
-        this.processBuyMoreGetMore(4, 'classic')
+        this.discountOnPrice(productId, 0, 309.99);
+        this.discountOnPrice(productId, 3, 389.99);
+        this.processBuyMoreGetMore(4, productId)
         break;
       default:
         break;
@@ -155,8 +172,10 @@ class Dashboard extends Component {
    * @memberOf Dashboard
    */
   discountOnPrice(productId, quantity, discountedPrice) {
-    if (this.userProducts[productId].quantity >= quantity) {
+    if(productId !== 'classic' && this.userProducts[productId].quantity >= quantity){
       this.userProducts[productId].discountedPrice = discountedPrice;
+      const message = `Congrats! On buying ${this.userProducts[productId].quantity} items of ${productId} price drops to $${discountedPrice}.`
+      this.showToast(message);
     }
   }
 
@@ -171,17 +190,12 @@ class Dashboard extends Component {
    */
   buyMoreGetMore(buyNum, productId) {
     let { itemAdded } = this.userProducts[productId];
-    if (itemAdded % 2 == 0 && itemAdded >= buyNum) {
-      const { applied, status } = this.specialDeals['buyMoreGetMore'];
+    if (itemAdded % 2 === 0 && itemAdded >= buyNum) {
+      const { applied, status } = this.specialDeals.buyMoreGetMore;
       const appliedCount = Math.floor(itemAdded / buyNum);
-      console.log('applied count => ', appliedCount);
-      this.specialDeals['buyMoreGetMore'] = Object.assign({}, this.specialDeals['buyMoreGetMore'], { status: true, applied: appliedCount });
-      // this.userProducts[productId].quantity = itemAdded + appliedCount;
-      console.log('deal check', this.specialDeals['buyMoreGetMore'])
-      console.log('quantity updated', this.userProducts[productId])
+      this.specialDeals.buyMoreGetMore = Object.assign({}, this.specialDeals.buyMoreGetMore, { status: true, applied: appliedCount });
       return true;
     } else {
-      // this.userProducts[productId].quantity = this.userProducts[productId].quantity + 1;
       return false;
     }
   }
@@ -196,6 +210,9 @@ class Dashboard extends Component {
    */
   processBuyMoreGetMore(buyNum, productId) {
     let totalCost = 0;
+    if(productId !== 'classic'){
+      return;
+    }
     if (this.buyMoreGetMore(buyNum, productId)) {
       const { price, quantity } = this.userProducts[productId];
       const actualCost = price * quantity;
@@ -212,6 +229,21 @@ class Dashboard extends Component {
       console.log('totalcost => ', totalCost);
     };
   }
+
+
+  showToast(message) {
+    this.setState({
+      openToast: true,
+      toastMessage: message
+    });
+  }
+
+  hideToast() {
+    this.setState({
+      openToast: false,
+      toastMessage: ''
+    });
+  };
 
   /**
    * 
@@ -233,8 +265,14 @@ class Dashboard extends Component {
             <ItemsList checkout={this.checkout} userProducts={this.state.userProducts} />
           </div>
         </div>
+        <Snackbar
+          open={this.state.openToast}
+          message={this.state.toastMessage}
+          autoHideDuration={4000}
+          onRequestClose={this.hideToast}
+        />
         <p className="footer">
-          &copy; copyrights 
+          &copy; copyrights
         </p>
       </div>
     );

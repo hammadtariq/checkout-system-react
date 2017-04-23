@@ -71,7 +71,7 @@ class Product extends Component {
                 </ul>
                 <div>
                     <RaisedButton
-                        label="Select Plan"
+                        label="Add"
                         secondary={true}
                         onTouchTap={this.selectPlan}
                     />

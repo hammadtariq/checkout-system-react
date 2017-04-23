@@ -39,6 +39,37 @@ class ItemsList extends Component {
         this.props.checkout();
     }
 
+    verifyDiscount(product) {
+        if (product.discountedPrice) {
+            return product.discountedPrice;
+        } else {
+            return product.price;
+        }
+    }
+
+    createItemList() { 
+        let items = [];
+        let totalCost = 0;
+        const { userProducts } = this.props;
+        for (let key in userProducts) {
+            if (userProducts[key].freeItem > 0) {
+                userProducts[key].quantity = userProducts[key].itemAdded + userProducts[key].freeItem;
+            }
+            totalCost += userProducts[key].totalCost;
+            for (let j = 0; j < userProducts[key].quantity; j++) {
+                let label = userProducts[key].id;
+                let price = '$' + this.verifyDiscount(userProducts[key]);
+                if (j < userProducts[key].freeItem) {
+                    label = userProducts[key].id;
+                    price = 'Free';
+                }
+                items.push(<ListItem key={key + j} secondaryText={price} primaryText={label} rightIcon={<ActionHome />} />);
+            }
+        }
+
+        return { totalCost: totalCost, items: items };
+    }
+
     /**
      * 
      * 
@@ -47,30 +78,24 @@ class ItemsList extends Component {
      * @memberOf ItemsList
      */
     render() {
-        let items = [];
-        const { name, price, userProducts } = this.props;
-        for (let key in userProducts) {
-            console.log('a ', key);
-            if (userProducts[key].freeItem > 0) {
-                userProducts[key].quantity = userProducts[key].itemAdded + userProducts[key].freeItem;
-            }
-            for (let j = 0; j < userProducts[key].quantity; j++) {
-                console.log('b ', userProducts[key].id);
-                items.push(<ListItem key={key + j} primaryText={userProducts[key].id} rightIcon={<ActionHome />} />);
-            }
-        }
-
+        const products = this.createItemList()
         return (
             <div>
-                <h3>My Cart</h3>
+                <h3>
+                    <span >Total: {products.totalCost}</span>
+                    <span style={{ float: 'right' }}>
+                        <RaisedButton
+                            label="Checkout"
+                            secondary={true}
+                            onTouchTap={this.checkout}
+                        />
+                    </span>
+                </h3>
+                <hr />
                 <List>
-                    {items}
+                    {products.items}
                 </List>
-                <RaisedButton
-                    label="Checkout"
-                    secondary={true}
-                    onTouchTap={this.checkout}
-                />
+
             </div>
         )
     }
