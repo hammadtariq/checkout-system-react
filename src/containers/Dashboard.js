@@ -38,11 +38,18 @@ class Dashboard extends Component {
     this.state = {
 
     };
-    this.userInfo = this.props.location.state.user;
-    console.log('routes: ', this.props.location.state);
+    this.setUserInfo();
     this.checkout = this.checkout.bind(this);
     this.selectedPlan = this.selectedPlan.bind(this);
     this.verifyUserDeals = this.verifyUserDeals.bind(this);
+  }
+
+  setUserInfo() {
+    const location = this.props.location
+    if(location.state && location.state.user) {
+      this.userInfo = location.state.user;
+    }
+    console.log('routes: ', this.userInfo);
   }
 
   /**
@@ -201,20 +208,20 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="container">
-        <div style={{ background: 'skyblue' }}>
+        <div className="container-item container-item-1">
           <Product selectedPlan={this.selectedPlan} id='classic' name="Classic Ad" price={269.99} />
           <Product selectedPlan={this.selectedPlan} id='standout' name="Standout Ad" price={322.99} />
           <Product selectedPlan={this.selectedPlan} id='premium' name="Premium Ad" price={394.99} />
         </div>
-        <div>
+        <div className="container-item container-item-2">
           <ItemsList />
         </div>
-        <div>
-          <RaisedButton
+        <div className="">
+          {/*<RaisedButton
             label="Checkout"
             secondary={true}
             onTouchTap={this.checkout}
-          />
+          />*/}
         </div>
       </div>
     );

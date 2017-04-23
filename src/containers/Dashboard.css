@@ -1,6 +1,29 @@
 .container {
     text-align: center;
     padding-top: 100;
+    display: -webkit-flex;
+    display: flex;
+    height: 550px;
+}
+
+.container-item {
+    flex-wrap: nowrap;
+}
+
+.mainBody:last-child {
+}
+
+.container-item-1 {
+    width: 65%;
+    padding: 1% 5%;
+    height: auto;
+    display: flex;
+}
+
+.container-item-2 {
+    width: 30%;
+    height: auto;
+    background: gainsboro;
 }
 
 .nav-bar {

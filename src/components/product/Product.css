@@ -1,17 +1,16 @@
 .mainBody {
-    float: 'left';
-    padding: '10px';
-    border: '1px solid #000';
-    width: '200px';
-    height: '500px';
-    margin: '10px';
-    text-align: 'center';
+    border: 1px solid #000;
+    height: 500px;
+    text-align: center;
+    background-color: cornflowerblue;
+    width: 28%;
+    margin: 2%;
 }
 
 .pricing {
-    width: '100px';
-    height: '100px';
-    border-radius: '100%';
-    background: 'yellow';
-    display: 'inline-block';
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background: yellow;
+    display: inline-block;
 }

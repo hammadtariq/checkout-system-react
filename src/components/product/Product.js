@@ -57,29 +57,11 @@ class Product extends Component {
      */
     render() {
         const { name, price } = this.props;
-        const mainBody = {
-            float: 'left',
-            padding: '10px',
-            border: '1px solid #000',
-            width: '200px',
-            height: '500px',
-            margin: '10px',
-            textAlign: 'center',
-        };
-
-        const pricing = {
-            width: '100px',
-            height: '100px',
-            borderRadius: '100%',
-            background: 'yellow',
-            display: 'inline-block'
-        };
-
         return (
-            <div style={mainBody}>
+            <div className="mainBody" >
                 <h2>{name}</h2>
                 <p>plan description</p>
-                <div style={pricing}>
+                <div className="pricing" >
                     <span style={{ fontWeight: 600, fontSize: 24 }}>${price}</span>
                 </div>
                 <ul style={{ listStyle: 'none' }}>

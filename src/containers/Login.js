@@ -31,6 +31,7 @@ class Login extends Component {
         }
         this.login = this.login.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.onEnterKey = this.onEnterKey.bind(this);
     }
 
     /**
@@ -44,6 +45,12 @@ class Login extends Component {
         const user = Object.assign(this.state.userInfo, { username: evt.target.value.substr(0, 100) })
         console.log(user);
         this.setState({ userInfo: user });
+    }
+
+    onEnterKey(evt) {
+        if (evt.key == 'Enter') {
+            this.login();
+        }
     }
 
     /**
@@ -84,6 +91,7 @@ class Login extends Component {
                                 value={this.state.textVal}
                                 autoFocus="autoFocus"
                                 onChange={this.handleChange}
+                                onKeyPress={this.onEnterKey}
                             />
                         </div>
                     </CardText>
