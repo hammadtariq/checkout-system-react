@@ -32,10 +32,11 @@ class ItemsList extends Component {
         super(props)
         this.state = {
         }
-        this.selectPlan = this.selectPlan.bind(this);
+        this.checkout = this.checkout.bind(this);
     }
 
-    selectPlan() {
+    checkout() {
+        this.props.checkout();
     }
 
     /**
@@ -49,19 +50,27 @@ class ItemsList extends Component {
         let items = [];
         const { name, price, userProducts } = this.props;
         for (let key in userProducts) {
+            console.log('a ', key);
+            if (userProducts[key].freeItem > 0) {
+                userProducts[key].quantity = userProducts[key].itemAdded + userProducts[key].freeItem;
+            }
             for (let j = 0; j < userProducts[key].quantity; j++) {
-                items.push(<ListItem key={key+j} primaryText={userProducts[key].id} rightIcon={<ActionHome />} />);
+                console.log('b ', userProducts[key].id);
+                items.push(<ListItem key={key + j} primaryText={userProducts[key].id} rightIcon={<ActionHome />} />);
             }
         }
-        const check = items.map((element)=>{
-
-        })
 
         return (
             <div>
+                <h3>My Cart</h3>
                 <List>
                     {items}
                 </List>
+                <RaisedButton
+                    label="Checkout"
+                    secondary={true}
+                    onTouchTap={this.checkout}
+                />
             </div>
         )
     }

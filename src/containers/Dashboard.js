@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import Product from '../components/product/Product';
 import ItemsList from '../components/ItemsList/ItemsList';
@@ -16,9 +18,9 @@ class Dashboard extends Component {
   userInfo = { username: '' };
   myCart = [];
   userProducts = {
-    classic: { price: '269.99', quantity: 0, totalCost: 0, id: 'classic' },
-    standout: { price: '322.99', quantity: 0, totalCost: 0, id: 'standout' },
-    premium: { price: '394.99', quantity: 0, totalCost: 0, id: 'premium' },
+    classic: { price: '269.99', quantity: 0, itemAdded: 0, totalCost: 0, id: 'classic' },
+    standout: { price: '322.99', quantity: 0, itemAdded: 0, totalCost: 0, id: 'standout' },
+    premium: { price: '394.99', quantity: 0, itemAdded: 0, totalCost: 0, id: 'premium' },
   };
 
   specialDeals = {
@@ -71,11 +73,8 @@ class Dashboard extends Component {
     console.log(productDetail);
     const p_id = productDetail.id;
     const p_info = this.userProducts[p_id]
-    this.userProducts[p_id] = Object.assign({}, p_info, { quantity: p_info.quantity + 1 })
+    this.userProducts[p_id] = Object.assign({}, p_info, { itemAdded: p_info.itemAdded + 1, quantity: p_info.quantity + 1 })
     this.verifyUserDeals();
-    // for (let i = 0; i < this.userProducts[p_id].quantity; i++) {
-    //   this.myCart.push(this.userProducts[p_id]);
-    // }
     this.setState((prevState, props) => ({
       userProducts: this.userProducts,
       myCart: this.myCart
@@ -92,13 +91,10 @@ class Dashboard extends Component {
    * @memberOf Dashboard
    */
   checkout() {
-    let checkoutInfo = [];
-    this.verifyUserDeals();
     for (let product in this.userProducts) {
       const { quantity, price } = this.userProducts[product];
       let totalCost = 0;
       if (quantity > 0) {
-        checkoutInfo.push(this.userProducts[product]);
         if (this.userProducts[product] && this.userProducts[product]['discountedPrice']) {
           console.log('discounted price found');
           totalCost = parseFloat(this.userProducts[product].discountedPrice * quantity);
@@ -111,7 +107,6 @@ class Dashboard extends Component {
         }
       }
     }
-    console.log('selected products => ', checkoutInfo);
     console.log('all ', this.userProducts);
   }
 
@@ -175,17 +170,18 @@ class Dashboard extends Component {
    * @memberOf Dashboard
    */
   buyMoreGetMore(buyNum, productId) {
-    const { quantity } = this.userProducts[productId];
-    if (quantity >= buyNum) {
+    let { itemAdded } = this.userProducts[productId];
+    if (itemAdded % 2 == 0 && itemAdded >= buyNum) {
       const { applied, status } = this.specialDeals['buyMoreGetMore'];
-      const appliedCount = Math.floor(quantity / buyNum);
+      const appliedCount = Math.floor(itemAdded / buyNum);
       console.log('applied count => ', appliedCount);
       this.specialDeals['buyMoreGetMore'] = Object.assign({}, this.specialDeals['buyMoreGetMore'], { status: true, applied: appliedCount });
-      this.userProducts[productId].quantity = this.userProducts[productId].quantity + appliedCount;
+      // this.userProducts[productId].quantity = itemAdded + appliedCount;
       console.log('deal check', this.specialDeals['buyMoreGetMore'])
       console.log('quantity updated', this.userProducts[productId])
       return true;
     } else {
+      // this.userProducts[productId].quantity = this.userProducts[productId].quantity + 1;
       return false;
     }
   }
@@ -226,22 +222,20 @@ class Dashboard extends Component {
    */
   render() {
     return (
-      <div className="container">
-        <div className="container-item container-item-1">
-          <Product selectedPlan={this.selectedPlan} id='classic' name="Classic Ad" price={269.99} />
-          <Product selectedPlan={this.selectedPlan} id='standout' name="Standout Ad" price={322.99} />
-          <Product selectedPlan={this.selectedPlan} id='premium' name="Premium Ad" price={394.99} />
+      <div>
+        <div className="container">
+          <div className="container-item container-item-1">
+            <Product selectedPlan={this.selectedPlan} id='classic' name="Classic Ad" price={269.99} />
+            <Product selectedPlan={this.selectedPlan} id='standout' name="Standout Ad" price={322.99} />
+            <Product selectedPlan={this.selectedPlan} id='premium' name="Premium Ad" price={394.99} />
+          </div>
+          <div className="container-item container-item-2">
+            <ItemsList checkout={this.checkout} userProducts={this.state.userProducts} />
+          </div>
         </div>
-        <div className="container-item container-item-2">
-          <ItemsList userProducts={this.state.userProducts} />
-        </div>
-        <div className="">
-          {/*<RaisedButton
-            label="Checkout"
-            secondary={true}
-            onTouchTap={this.checkout}
-          />*/}
-        </div>
+        <p className="footer">
+          &copy; copyrights 
+        </p>
       </div>
     );
   }
