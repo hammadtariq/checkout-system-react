@@ -111,14 +111,13 @@ class Dashboard extends Component {
       let totalCost = 0;
       if (quantity > 0) {
         if (this.userProducts[product] && this.userProducts[product]['discountedPrice']) {
-          console.log('discounted price found');
           totalCost = parseFloat(this.userProducts[product].discountedPrice * quantity);
           this.userProducts[product].totalCost = totalCost;
         } else if (product !== 'classic') {
           totalCost = parseFloat(price * quantity);
           this.userProducts[product].totalCost = totalCost;
         } else {
-          console.log("default case");
+          console.log("nothing to calculate");
         }
       }
     }
@@ -293,8 +292,8 @@ class Dashboard extends Component {
       totalCost = actualCost - discount;
       this.userProducts[productId].totalCost = actualCost - discount;
       this.userProducts[productId].freeItem = this.specialDeals['buyMoreGetMore'].applied;
-      console.log('actualCost => ', actualCost);
-      console.log('after discount => ', totalCost);
+      // console.log('actualCost => ', actualCost);
+      // console.log('after discount => ', totalCost);
     } else {
       const { price, quantity } = this.userProducts[productId];
       totalCost = price * quantity;
