@@ -26,8 +26,8 @@ const RouteComponent = () => (
                     title={<span className="appbar-title" >Checkout System</span>}
                     iconElementRight={
                         <ul className="nav-bar">
-                            <li className="nav-li"><Link to="/">Login</Link></li>
-                            <li className="nav-li"><Link to="/dashboard">Dashboard</Link></li>
+                            {/*<li className="nav-li"><Link to="/">Login</Link></li>
+                            <li className="nav-li"><Link to="/dashboard">Dashboard</Link></li>*/}
                         </ul>
                     }
                 />

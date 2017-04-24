@@ -338,13 +338,18 @@ class Dashboard extends Component {
    * @memberOf Dashboard
    */
   render() {
+    const standOut = { background: "#00BCD4" };
+    const standOutPrice = { background: "#fff", color: '#00BCD4' };
+    const customPrice = { background: "rgb(255, 87, 34)", color: '#fff' };
+    const customStyle = {};
+
     return (
       <div>
         <div className="container">
           <div className="container-item container-item-1">
-            <Product selectedPlan={this.selectedPlan} id='classic' name="Classic Ad" price={269.99} />
-            <Product selectedPlan={this.selectedPlan} id='standout' name="Standout Ad" price={322.99} />
-            <Product selectedPlan={this.selectedPlan} id='premium' name="Premium Ad" price={394.99} />
+            <Product selectedPlan={this.selectedPlan} id='classic' name="Classic Ad" price={269.99} customStyle={customStyle} customPrice={customPrice} />
+            <Product selectedPlan={this.selectedPlan} id='standout' name="Standout Ad" price={322.99} customStyle={standOut} customPrice={standOutPrice} />
+            <Product selectedPlan={this.selectedPlan} id='premium' name="Premium Ad" price={394.99} customStyle={customStyle} customPrice={customPrice} />
           </div>
           <div className="container-item container-item-2">
             <ItemsList checkout={this.checkout} userProducts={this.state.userProducts} />

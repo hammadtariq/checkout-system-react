@@ -58,13 +58,13 @@ class Product extends Component {
      * @memberOf Product
      */
     render() {
-        const { name, price } = this.props;
+        const { name, price, customStyle, customPrice } = this.props;
         return (
-            <div className="mainBody" >
+            <div className="mainBody" style = {customStyle} >
                 <h2>{name}</h2>
                 <p>plan description</p>
-                <div className="pricing" >
-                    <span style={{ fontWeight: 600, fontSize: 24 }}>${price}</span>
+                <div className="pricing" style={customPrice} >
+                    <span className="price" >${price}</span>
                 </div>
                 <ul style={{ listStyle: 'none' }}>
                     <li>a</li>
@@ -73,7 +73,7 @@ class Product extends Component {
                 </ul>
                 <div>
                     <RaisedButton
-                        label="Add"
+                        label="add"
                         secondary={true}
                         onTouchTap={this.selectPlan}
                     />
