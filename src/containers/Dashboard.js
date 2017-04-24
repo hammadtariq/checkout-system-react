@@ -131,10 +131,10 @@ class Dashboard extends Component {
       const { quantity, price } = this.userProducts[product];
       let totalCost = 0;
       if (quantity > 0) {
-        if (this.userProducts[product] && this.userProducts[product]['discountedPrice']) {
+        if (this.userProducts[product].discountedPrice) {
           totalCost = parseFloat(this.userProducts[product].discountedPrice * quantity);
           this.userProducts[product].totalCost = totalCost;
-        } else if (product !== 'classic') {
+        } else if (!this.userProducts[product]['freeItem']) {
           totalCost = parseFloat(price * quantity);
           this.userProducts[product].totalCost = totalCost;
         } else {
@@ -287,6 +287,8 @@ class Dashboard extends Component {
       const { applied, status } = this.specialDeals.buyMoreGetMore;
       const appliedCount = Math.floor(itemAdded / buyNum);
       this.specialDeals.buyMoreGetMore = Object.assign({}, this.specialDeals.buyMoreGetMore, { status: true, applied: appliedCount });
+      const message = `Congrats! On buying ${buyNum} items of ${productId} you got one free item.`
+      this.showToast(message);
       return true;
     } else {
       return false;
@@ -303,7 +305,6 @@ class Dashboard extends Component {
    */
   processBuyMoreGetMore(buyNum, productId) {
     let totalCost = 0;
-    
     if (this.buyMoreGetMore(buyNum, productId)) {
       const { price } = this.userProducts[productId];
       this.userProducts[productId].quantity = this.userProducts[productId].itemAdded + this.specialDeals['buyMoreGetMore'].applied;
@@ -316,7 +317,6 @@ class Dashboard extends Component {
       const { price, quantity, itemAdded } = this.userProducts[productId];
       totalCost = price * itemAdded;
       this.userProducts[productId].totalCost = totalCost
-      // console.log('totalcost => ', totalCost);
     };
   }
 

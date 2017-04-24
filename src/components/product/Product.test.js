@@ -11,10 +11,5 @@ describe('Product', () => {
     shallow(<Product selectedPlan={dashboard.selectedPlan} id='classic' name="Classic Ad" price={269.99} />);
   });
 
-  // it('should send product detail to parent component', () => {
-  //   console.log('props => ', product);
-  //   expect(product.selectPlan()).toEqual(undefined);
-  // });
-
 });
 
