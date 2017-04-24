@@ -55,7 +55,7 @@ class Login extends Component {
      * @memberOf Login
      */
     onEnterKey(evt) {
-        if (evt.key == 'Enter') {
+        if (evt.key === 'Enter') {
             this.login();
         }
     }

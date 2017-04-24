@@ -18,9 +18,9 @@ import './Dashboard.css';
 class Dashboard extends Component {
   userInfo = { username: '' };
   userProducts = {
-    classic: { price: '269.99', quantity: 0, itemAdded: 0, totalCost: 0, id: 'classic' },
-    standout: { price: '322.99', quantity: 0, itemAdded: 0, totalCost: 0, id: 'standout' },
-    premium: { price: '394.99', quantity: 0, itemAdded: 0, totalCost: 0, id: 'premium' },
+    classic: { price: 269.99, discountedPrice: 0, quantity: 0, itemAdded: 0, totalCost: 0, id: 'classic' },
+    standout: { price: 322.99, discountedPrice: 0, quantity: 0, itemAdded: 0, totalCost: 0, id: 'standout' },
+    premium: { price: 394.99, discountedPrice: 0, quantity: 0, itemAdded: 0, totalCost: 0, id: 'premium' },
   };
 
   specialDeals = {

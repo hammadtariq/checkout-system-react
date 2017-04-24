@@ -64,10 +64,9 @@ class ItemsList extends Component {
      * 
      * @memberOf ItemsList
      */
-    createItemList() { 
+    createItemList(userProducts) { 
         let items = [];
         let totalCost = 0;
-        const { userProducts } = this.props;
         for (let key in userProducts) {
             if (userProducts[key].freeItem > 0) {
                 userProducts[key].quantity = userProducts[key].itemAdded + userProducts[key].freeItem;
@@ -84,7 +83,7 @@ class ItemsList extends Component {
             }
         }
         totalCost = Math.round(totalCost * 100) / 100
-        return { totalCost: totalCost, items: items };
+        return { 'totalCost': totalCost, 'items': items };
     }
 
     /**
@@ -95,7 +94,7 @@ class ItemsList extends Component {
      * @memberOf ItemsList
      */
     render() {
-        const products = this.createItemList()
+        const products = this.createItemList(this.props.userProducts)
         return (
             <div>
                 <h3>
