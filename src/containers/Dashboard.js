@@ -303,21 +303,18 @@ class Dashboard extends Component {
    */
   processBuyMoreGetMore(buyNum, productId) {
     let totalCost = 0;
-    if (productId !== 'classic') {
-      return;
-    }
+    
     if (this.buyMoreGetMore(buyNum, productId)) {
-      const { price, quantity } = this.userProducts[productId];
-      const actualCost = price * quantity;
+      const { price } = this.userProducts[productId];
+      this.userProducts[productId].quantity = this.userProducts[productId].itemAdded + this.specialDeals['buyMoreGetMore'].applied;
+      const actualCost = price * this.userProducts[productId].quantity;
       const discount = price * this.specialDeals['buyMoreGetMore'].applied;
       totalCost = actualCost - discount;
       this.userProducts[productId].totalCost = actualCost - discount;
       this.userProducts[productId].freeItem = this.specialDeals['buyMoreGetMore'].applied;
-      // console.log('actualCost => ', actualCost);
-      // console.log('after discount => ', totalCost);
     } else {
-      const { price, quantity } = this.userProducts[productId];
-      totalCost = price * quantity;
+      const { price, quantity, itemAdded } = this.userProducts[productId];
+      totalCost = price * itemAdded;
       this.userProducts[productId].totalCost = totalCost
       // console.log('totalcost => ', totalCost);
     };

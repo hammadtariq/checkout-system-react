@@ -68,9 +68,6 @@ class ItemsList extends Component {
         let items = [];
         let totalCost = 0;
         for (let key in userProducts) {
-            if (userProducts[key].freeItem > 0) {
-                userProducts[key].quantity = userProducts[key].itemAdded + userProducts[key].freeItem;
-            }
             totalCost += userProducts[key].totalCost;
             for (let j = 0; j < userProducts[key].quantity; j++) {
                 let label = userProducts[key].id;
