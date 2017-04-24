@@ -12,7 +12,7 @@ const propTypes = {
 const defaultProps = {
     name: '',
     price: '',
-    selectedPlan: () => {}
+    selectedPlan: () => { }
 }
 /**
  * 
@@ -47,7 +47,7 @@ class Product extends Component {
             name: name,
             price: price,
         };
-        // this.props.selectedPlan(product);
+        this.props.selectedPlan(product);
     }
 
     /**
@@ -60,7 +60,7 @@ class Product extends Component {
     render() {
         const { name, price, customStyle, customPrice } = this.props;
         return (
-            <div className="mainBody" style = {customStyle} >
+            <div className="mainBody" style={customStyle} >
                 <h2>{name}</h2>
                 <p>plan description</p>
                 <div className="pricing" style={customPrice} >
