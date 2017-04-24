@@ -27,7 +27,6 @@ const RouteComponent = () => (
                     iconElementRight={
                         <ul className="nav-bar">
                             <li className="nav-li"><Link to="/">Login</Link></li>
-                            <li className="nav-li"><Link to="/dashboard">Dashboard</Link></li>
                         </ul>
                     }
                 />

@@ -2,13 +2,7 @@ import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardActions, CardText } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
-
-const styles = {
-    container: {
-        textAlign: 'center',
-        paddingTop: 80,
-    },
-};
+import './Login.css';
 
 /**
  * 
@@ -80,7 +74,14 @@ class Login extends Component {
      */
     render() {
         return (
-                <div style={styles.container}>
+                <div className='container-login'>
+                    <h5>Known Usernames</h5>
+                    <ul>
+                        <li className='name-li'>apple</li>
+                        <li className='name-li'>nike</li>
+                        <li className='name-li'>unilever</li>
+                        <li className='name-li'>ford</li>
+                    </ul>
                     <h2>Login</h2>
                     <Card>
                         <CardText>

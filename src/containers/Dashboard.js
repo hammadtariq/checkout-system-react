@@ -410,7 +410,7 @@ class Dashboard extends Component {
               id={premium.id}
               name={premium.name}
               price={premium.price}
-              description={'Puts the advertisement at the top of the results, allowing higher visibility'}
+              description={'Puts the advertisement at the top of the results'}
               customStyle={customStyle}
               customPrice={customPrice} />
           </div>
