@@ -36,8 +36,8 @@ class Dashboard extends Component {
    * 
    * @memberOf Dashboard
    */
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       openToast: false,
       toastMessage: '',
@@ -249,6 +249,7 @@ class Dashboard extends Component {
       const message = `Congrats! On buying ${this.userProducts[productId].quantity} items of ${productId} price drops to $${discountedPrice}.`
       this.showToast(message);
     }
+    return this.userProducts[productId].discountedPrice;
   }
 
   /**
@@ -298,7 +299,7 @@ class Dashboard extends Component {
       const { price, quantity } = this.userProducts[productId];
       totalCost = price * quantity;
       this.userProducts[productId].totalCost = totalCost
-      console.log('totalcost => ', totalCost);
+      // console.log('totalcost => ', totalCost);
     };
   }
 

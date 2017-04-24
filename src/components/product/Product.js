@@ -9,6 +9,11 @@ const propTypes = {
     selectedPlan: PropTypes.func
 }
 
+const defaultProps = {
+    name: '',
+    price: '',
+    selectedPlan: () => {}
+}
 /**
  * 
  * 
@@ -35,14 +40,14 @@ class Product extends Component {
      * 
      * @memberOf Product
      */
-    selectPlan(selected_product) {
-        const { id, name, price } = selected_product;
+    selectPlan() {
+        const { id, name, price } = this.props;
         const product = {
             id: id,
             name: name,
             price: price,
         };
-        this.props.selectedPlan(product);
+        // this.props.selectedPlan(product);
     }
 
     /**
@@ -70,7 +75,7 @@ class Product extends Component {
                     <RaisedButton
                         label="Add"
                         secondary={true}
-                        onTouchTap={this.selectPlan.bind(this, this.props)}
+                        onTouchTap={this.selectPlan}
                     />
                 </div>
             </div>
@@ -79,5 +84,7 @@ class Product extends Component {
 }
 
 Product.propTypes = propTypes
+
+Product.defaultProps = defaultProps
 
 export default Product
