@@ -53,12 +53,24 @@ class Dashboard extends Component {
     this.hideToast = this.hideToast.bind(this);
   }
 
+  /**
+   * 
+   * 
+   * 
+   * @memberOf Dashboard
+   */
   componentDidMount() {
     this.setUserInfo();
   }
 
+  /**
+   * 
+   * 
+   * 
+   * @memberOf Dashboard
+   */
   setUserInfo() {
-    const location = this.props.location
+    const location = this.props.location || {}
     if (location.state && location.state.user) {
       this.setState({ userInfo: location.state.user }, () => {
         console.log('calback => ', this.state.userInfo);
@@ -157,6 +169,13 @@ class Dashboard extends Component {
     }
   }
 
+  /**
+   * 
+   * 
+   * @param {any} productId 
+   * 
+   * @memberOf Dashboard
+   */
   applyFordDeals(productId) {
     if (productId === 'standout') {
       this.discountOnPrice(productId, 0, 309.99);
@@ -169,6 +188,13 @@ class Dashboard extends Component {
     }
   }
 
+  /**
+   * 
+   * 
+   * @param {any} productId 
+   * 
+   * @memberOf Dashboard
+   */
   applyNikeDeals(productId) {
     if (productId === 'premium') {
       this.discountOnPrice(productId, 4, 379.99);
@@ -177,6 +203,13 @@ class Dashboard extends Component {
     }
   }
 
+  /**
+   * 
+   * 
+   * @param {any} productId 
+   * 
+   * @memberOf Dashboard
+   */
   applyAppleDeals(productId) {
     if (productId === 'standout') {
       this.discountOnPrice(productId, 0, 299.99);
@@ -185,6 +218,13 @@ class Dashboard extends Component {
     }
   }
 
+  /**
+   * 
+   * 
+   * @param {any} productId 
+   * 
+   * @memberOf Dashboard
+   */
   applyUnileverDeals(productId) {
     if (productId === 'classic') {
       this.processBuyMoreGetMore(2, productId)
@@ -263,6 +303,13 @@ class Dashboard extends Component {
   }
 
 
+  /**
+   * 
+   * 
+   * @param {any} message 
+   * 
+   * @memberOf Dashboard
+   */
   showToast(message) {
     this.setState({
       openToast: true,
@@ -270,6 +317,12 @@ class Dashboard extends Component {
     });
   }
 
+  /**
+   * 
+   * 
+   * 
+   * @memberOf Dashboard
+   */
   hideToast() {
     this.setState({
       openToast: false,

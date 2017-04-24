@@ -46,6 +46,14 @@ class Login extends Component {
         this.setState({ userInfo: user });
     }
 
+
+    /**
+     * 
+     * 
+     * @param {any} evt 
+     * 
+     * @memberOf Login
+     */
     onEnterKey(evt) {
         if (evt.key == 'Enter') {
             this.login();
@@ -72,37 +80,31 @@ class Login extends Component {
      */
     render() {
         return (
-            <div style={styles.container}>
-                <h2>Login</h2>
-                <Card>
-                    {/*<CardHeader
-                            title="Login"
-                            subtitle="Subtitle"
-                            actAsExpander={true}
-                            showExpandableButton={true}
-                        />*/}
-                    <CardText>
-                        <div>
-                            <TextField
-                                name="username"
-                                floatingLabelText="Username"
-                                type="text"
-                                value={this.state.textVal}
-                                autoFocus="autoFocus"
-                                onChange={this.handleChange}
-                                onKeyPress={this.onEnterKey}
+                <div style={styles.container}>
+                    <h2>Login</h2>
+                    <Card>
+                        <CardText>
+                            <div>
+                                <TextField
+                                    name="username"
+                                    floatingLabelText="Username"
+                                    type="text"
+                                    value={this.state.textVal}
+                                    autoFocus="autoFocus"
+                                    onChange={this.handleChange}
+                                    onKeyPress={this.onEnterKey}
+                                />
+                            </div>
+                        </CardText>
+                        <CardActions>
+                            <RaisedButton
+                                label="Login"
+                                secondary={true}
+                                onTouchTap={this.login}
                             />
-                        </div>
-                    </CardText>
-                    <CardActions>
-                        <RaisedButton
-                            label="Login"
-                            secondary={true}
-                            onTouchTap={this.login}
-                        />
-                    </CardActions>
-                </Card>
-            </div>
+                        </CardActions>
+                    </Card>
+                </div>
         );
     }
 }

@@ -11,10 +11,6 @@ const propTypes = {
     price: PropTypes.number
 }
 
-const defaultProps = {
-    defaultProps
-}
-
 /**
  * 
  * 
@@ -35,10 +31,24 @@ class ItemsList extends Component {
         this.checkout = this.checkout.bind(this);
     }
 
+    /**
+     * 
+     * 
+     * 
+     * @memberOf ItemsList
+     */
     checkout() {
         this.props.checkout();
     }
 
+    /**
+     * 
+     * 
+     * @param {any} product 
+     * @returns 
+     * 
+     * @memberOf ItemsList
+     */
     verifyDiscount(product) {
         if (product.discountedPrice) {
             return product.discountedPrice;
@@ -47,6 +57,13 @@ class ItemsList extends Component {
         }
     }
 
+    /**
+     * 
+     * 
+     * @returns 
+     * 
+     * @memberOf ItemsList
+     */
     createItemList() { 
         let items = [];
         let totalCost = 0;
@@ -102,7 +119,5 @@ class ItemsList extends Component {
 }
 
 ItemsList.propTypes = propTypes
-
-ItemsList.defaultProps = defaultProps
 
 export default ItemsList

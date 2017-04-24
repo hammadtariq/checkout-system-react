@@ -8,9 +8,9 @@ const propTypes = {
     price: PropTypes.number
 }
 
-const defaultProps = {
-    defaultProps
-}
+// const defaultProps = {
+//     defaultProps
+// }
 
 /**
  * 
@@ -83,6 +83,6 @@ class Product extends Component {
 
 Product.propTypes = propTypes
 
-Product.defaultProps = defaultProps
+// Product.defaultProps = defaultProps
 
 export default Product
