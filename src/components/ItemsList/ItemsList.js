@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import { List, ListItem } from 'material-ui/List';
-import ActionHome from 'material-ui/svg-icons/action/home';
+import ImageAssistantPhoto from 'material-ui/svg-icons/image/assistant-photo';
 
 import './ItemsList.css';
 
@@ -73,10 +73,9 @@ class ItemsList extends Component {
                 let label = userProducts[key].id;
                 let price = '$' + this.verifyDiscount(userProducts[key]);
                 if (j < userProducts[key].freeItem) {
-                    label = userProducts[key].id;
                     price = 'Free';
                 }
-                items.push(<ListItem key={key + j} secondaryText={price} primaryText={label} rightIcon={<ActionHome />} />);
+                items.push(<ListItem key={key + j} secondaryText={price} primaryText={label} rightIcon={<ImageAssistantPhoto />} />);
             }
         }
         totalCost = Math.round(totalCost * 100) / 100

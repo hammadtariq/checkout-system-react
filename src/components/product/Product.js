@@ -58,20 +58,15 @@ class Product extends Component {
      * @memberOf Product
      */
     render() {
-        const { name, price, customStyle, customPrice } = this.props;
+        const { name, price, description, customStyle, customPrice } = this.props;
         return (
             <div className="mainBody" style={customStyle} >
                 <h2>{name}</h2>
-                <p>plan description</p>
                 <div className="pricing" style={customPrice} >
                     <span className="price" >${price}</span>
                 </div>
-                <ul style={{ listStyle: 'none' }}>
-                    <li>a</li>
-                    <li>b</li>
-                    <li>c</li>
-                </ul>
-                <div>
+                <p className='description'>{description}</p>
+                <div className='action'>
                     <RaisedButton
                         label="add"
                         secondary={true}

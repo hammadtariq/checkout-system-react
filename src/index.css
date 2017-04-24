@@ -25,17 +25,7 @@ strong {
 }
 
 a {
-  color: #566b78;
-}
-
-input {
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #a7adba;
-}
-
-label {
-  font-weight: 500;
-  padding: 10px;
+  color: #FFF;
+  text-decoration: none;
 }
 

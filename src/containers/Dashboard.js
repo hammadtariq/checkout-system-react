@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
 import Snackbar from 'material-ui/Snackbar';
 
 import Product from '../components/product/Product';
@@ -25,6 +22,7 @@ class Dashboard extends Component {
       itemAdded: 0,
       totalCost: 0,
       id: 'classic',
+      name: 'Classic Ad',
     },
     standout: {
       price: 322.99,
@@ -32,7 +30,8 @@ class Dashboard extends Component {
       quantity: 0,
       itemAdded: 0,
       totalCost: 0,
-      id: 'standout'
+      id: 'standout',
+      name: 'Standout Ad',
     },
     premium: {
       price: 394.99,
@@ -40,7 +39,8 @@ class Dashboard extends Component {
       quantity: 0,
       itemAdded: 0,
       totalCost: 0,
-      id: 'premium'
+      id: 'premium',
+      name: 'Premium Ad',
     },
   };
 
@@ -153,7 +153,33 @@ class Dashboard extends Component {
    * @memberOf Dashboard
    */
   checkout() {
-    console.log('checkout');
+    this.userProducts = {
+      classic: {
+        price: 269.99,
+        discountedPrice: 0,
+        quantity: 0,
+        itemAdded: 0,
+        totalCost: 0,
+        id: 'classic',
+      },
+      standout: {
+        price: 322.99,
+        discountedPrice: 0,
+        quantity: 0,
+        itemAdded: 0,
+        totalCost: 0,
+        id: 'standout'
+      },
+      premium: {
+        price: 394.99,
+        discountedPrice: 0,
+        quantity: 0,
+        itemAdded: 0,
+        totalCost: 0,
+        id: 'premium'
+      },
+    };
+    this.setState({userProducts: this.userProducts});
   }
 
   /**
@@ -284,7 +310,6 @@ class Dashboard extends Component {
   buyMoreGetMore(buyNum, productId) {
     let { itemAdded } = this.userProducts[productId];
     if (itemAdded % 2 === 0 && itemAdded >= buyNum) {
-      const { applied, status } = this.specialDeals.buyMoreGetMore;
       const appliedCount = Math.floor(itemAdded / buyNum);
       this.specialDeals.buyMoreGetMore = Object.assign({}, this.specialDeals.buyMoreGetMore, { status: true, applied: appliedCount });
       const message = `Congrats! On buying ${buyNum} items of ${productId} you got one free item.`
@@ -314,7 +339,7 @@ class Dashboard extends Component {
       this.userProducts[productId].totalCost = actualCost - discount;
       this.userProducts[productId].freeItem = this.specialDeals['buyMoreGetMore'].applied;
     } else {
-      const { price, quantity, itemAdded } = this.userProducts[productId];
+      const { price, itemAdded } = this.userProducts[productId];
       totalCost = price * itemAdded;
       this.userProducts[productId].totalCost = totalCost
     };
@@ -360,29 +385,32 @@ class Dashboard extends Component {
     const standOutPrice = { background: "#fff", color: '#00BCD4' };
     const customPrice = { background: "rgb(255, 87, 34)", color: '#fff' };
     const customStyle = {};
-
+    const { classic, standout, premium } = this.state.userProducts;
     return (
       <div>
         <div className="container">
           <div className="container-item container-item-1">
             <Product selectedPlan={this.selectedPlan}
-              id='classic'
-              name="Classic Ad"
-              price={269.99}
+              id={classic.id}
+              name={classic.name}
+              price={classic.price}
+              description={'Basic level of advertisement'}
               customStyle={customStyle}
               customPrice={customPrice} />
             <Product
               selectedPlan={this.selectedPlan}
-              id='standout'
-              name="Standout Ad"
-              price={322.99}
+              id={standout.id}
+              name={standout.name}
+              price={standout.price}
+              description={'Use a company logo and longer presentation'}
               customStyle={standOut}
               customPrice={standOutPrice} />
             <Product
               selectedPlan={this.selectedPlan}
-              id='premium'
-              name="Premium Ad"
-              price={394.99}
+              id={premium.id}
+              name={premium.name}
+              price={premium.price}
+              description={'Puts the advertisement at the top of the results, allowing higher visibility'}
               customStyle={customStyle}
               customPrice={customPrice} />
           </div>
